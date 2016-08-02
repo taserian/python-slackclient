@@ -22,7 +22,7 @@ nbconvert==4.2.0
 nbformat==4.0.1
 notebook==4.2.1
 omdb==0.6.0
-path.py==0.0.0
+path.py==8.2.1
 pathlib2==2.1.0
 pickleshare==0.7.2
 prompt-toolkit==1.0.3
