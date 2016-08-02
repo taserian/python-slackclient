@@ -1,3 +1,4 @@
 future==0.15.2
 six==1.10.0
 websocket-client==0.35.0
+omdb==0.6.0

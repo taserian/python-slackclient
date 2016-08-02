@@ -10,7 +10,7 @@ env
 0/
 tests/.cache
 .coverage
-.cache
 docs/_build
 docs/_static
 docs/_templates
+/api-token.txt
