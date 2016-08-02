@@ -1,9 +1,10 @@
 import os
 
 import omdb
+from omdb import Client
 
 
-def imdbInfo(input_text):
+def imdb_info(input_text):
     OMDB_API = os.environ.get("OMDB_API")
     if len(input_text) == 0:
         text = "Command format: imdb <title> [ ## <year> ]"
@@ -46,5 +47,24 @@ def format_rating(item):
     return imdb_portion + tomato_portion
 
 
-def imdbSearch(text):
-    return dict(text="Not implemented yet.")
+def imdb_search(input_text):
+    OMDB_API = os.environ.get("OMDB_API")
+
+    if len(input_text) == 0:
+        text = "Command format: imdbs <title> [ ## <page> ]"
+        attach = []
+    else:
+        options_list = input_text.split("##")
+        if len(options_list) > 1:
+            om = Client().get(search=options_list[0], page=options_list[1])
+        else:
+            om = omdb.search(input_text)
+        mn = min(len(om), 10)
+        text = "Here's what I found: "
+        attach = []
+        d = dict()
+        for i in xrange(mn):
+            item = om[i]
+            d["title"] = d["title"] + item.title + " (" + item.year + ") \n"
+        attach.append(d)
+    return text, attach
