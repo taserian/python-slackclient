@@ -63,8 +63,8 @@ def imdb_search(input_text):
         text = "Here's what I found: "
         attach = []
         d = dict()
-        for i in xrange(mn):
+        for i in range(mn):
             item = om[i]
-            d["title"] = d["title"] + item.title + " (" + item.year + ") \n"
+            d["title"] = (d["title"] if "title" in d.keys() else "") + item.title + " (" + item.year + ") \n"
         attach.append(d)
     return text, attach
