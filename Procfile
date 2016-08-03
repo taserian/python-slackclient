@@ -1,2 +1,2 @@
-heroku config:setWEB_CONCURRENCY=3
-web: python experibot.py
+heroku ps:scale worker=1
+worker: python experibot.py
