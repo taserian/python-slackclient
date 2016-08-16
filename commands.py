@@ -1,7 +1,6 @@
 import os
 
 import omdb
-from omdb import Client
 
 
 def imdb_info(input_text):
@@ -56,7 +55,7 @@ def imdb_search(input_text):
     else:
         options_list = input_text.split("##")
         if len(options_list) > 1:
-            om = Client().get(search=options_list[0], page=options_list[1])
+            om = omdb.search(options_list[0], page=options_list[1])
         else:
             om = omdb.search(input_text)
         mn = min(len(om), 10)

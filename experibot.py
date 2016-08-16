@@ -22,10 +22,11 @@ def bothelp(text):
 
 
 # constants
-AT_BOT = "<@" + BOT_ID + ">:"
+AT_BOT = "<@" + BOT_ID + "> "
 COMMANDS = {"help": command_struct(bothelp, "This stuff, yeah."),
             "imdb": command_struct(C.imdb_info, "Get information on a specific movie."),
-            "imdbs": command_struct(C.imdb_search, "Search information on movies.")
+            "imdbs": command_struct(C.imdb_search, "Search information on movies."),
+            ""
             }
 
 UNABLE_TO_UNDERSTAND = "help"
@@ -47,7 +48,7 @@ def handle_command(comm, chan):
     received_command = comm.split(" ")[0]
     if received_command in COMMANDS.keys():
         t, attach = COMMANDS[received_command].func(" ".join(comm.split(" ")[1:]))
-        print t, attach
+        # print t, attach
     slack_client.api_call("chat.postMessage", channel=chan,
                           text=t,
                           attachments=attach,
