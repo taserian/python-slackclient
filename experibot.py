@@ -25,8 +25,7 @@ def bothelp(text):
 AT_BOT = "<@" + BOT_ID + "> "
 COMMANDS = {"help": command_struct(bothelp, "This stuff, yeah."),
             "imdb": command_struct(C.imdb_info, "Get information on a specific movie."),
-            "imdbs": command_struct(C.imdb_search, "Search information on movies."),
-            ""
+            "imdbs": command_struct(C.imdb_search, "Search information on movies.")
             }
 
 UNABLE_TO_UNDERSTAND = "help"
