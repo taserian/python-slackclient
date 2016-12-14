@@ -2,7 +2,7 @@ import os
 import time
 from collections import namedtuple
 
-import commands as C
+import bot_commands as c
 from slackclient import SlackClient
 
 command_struct = namedtuple("command_struct", ["func", "description"])
@@ -24,8 +24,8 @@ def bothelp(text):
 # constants
 AT_BOT = "<@" + BOT_ID + "> "
 COMMANDS = {"help": command_struct(bothelp, "This stuff, yeah."),
-            "imdb": command_struct(C.imdb_info, "Get information on a specific movie."),
-            "imdbs": command_struct(C.imdb_search, "Search information on movies.")
+            "imdb": command_struct(c.imdb_info, "Get information on a specific movie."),
+            "imdbs": command_struct(c.imdb_search, "Search information on movies.")
             }
 
 UNABLE_TO_UNDERSTAND = "help"
@@ -73,7 +73,7 @@ def parse_slack_output(slack_rtm_output):
 if __name__ == "__main__":
     READ_WEBSOCKET_DELAY = 1  # 1 second delay between reading from firehose
     if slack_client.rtm_connect():
-        print("StarterBot connected and running!")
+        # print("StarterBot connected and running!")
         while True:
             command, channel = parse_slack_output(slack_client.rtm_read())
             if command and channel:
