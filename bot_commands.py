@@ -1,4 +1,3 @@
-import json
 import os
 
 import omdb
@@ -7,6 +6,7 @@ import requests
 
 def imdb_info(input_text):
     OMDB_API = os.environ.get("OMDB_API")
+    message_list = []
     if len(input_text) == 0:
         text = "Command format: imdb <title> [ ## <year> ]"
         attach = []
@@ -28,26 +28,30 @@ def imdb_info(input_text):
                                              dict(title="Runtime", value=om.runtime, short=True),
                                              dict(title="Actors", value=om.actors, short=True),
                                              dict(title="Rating", value=format_rating(om),
-                                                  short=True),
-                                             dict(title="Latest trailer", value=get_trailer(om.imdb_id))])
-                                )])
+                                                  short=True)
+                                             ])
+                                )
+                           ])
+            message_list.append((text, attach))
+            text = get_trailer(om.imdb_id)
+            message_list.append((text, []))
         else:
             text = "Sorry, I can't seem to find anything for " + input_text
-            attach = []
-    return text, attach
+            message_list.append((text, []))
+    return message_list
 
 
 def get_trailer(imdb_id):
     TMDB_API = os.environ.get("TMDB_API")
     find_movie_url = 'https://api.themoviedb.org/3/find/{id}?api_key={api}&language=en-US&external_source=imdb_id'.format(
         id=imdb_id, api=TMDB_API)
-    movie = json.loads(_GET(find_movie_url))
-    tmdb_movie_id = movie["movie_results"]["id"]
+    t = _GET(find_movie_url)
+    tmdb_movie_id = t['movie_results'][0]['id']
     get_trailer_url = 'https://api.themoviedb.org/3/movie/{id}/videos?api_key={api}&language=en-US'.format(
         id=tmdb_movie_id, api=TMDB_API)
-    videos = json.loads(_GET(get_trailer_url))
-    latest_trailer_key = videos["results"][0]["key"]
-    return "https://www.youtube.com/watch?v={yt_key}".format(yt_key=latest_trailer_key)
+    t = _GET(get_trailer_url)
+    latest_trailer_key = t['results'][0]['key']
+    return "http://www.youtube.com/watch?v={yt_key}".format(yt_key=latest_trailer_key)
 
 
 def _GET(path):
@@ -75,10 +79,10 @@ def format_rating(item):
 
 def imdb_search(input_text):
     OMDB_API = os.environ.get("OMDB_API")
-
+    message_list = []
     if len(input_text) == 0:
         text = "Command format: imdbs <title> [ ## <page> ]"
-        attach = []
+        message_list.append((text, []))
     else:
         options_list = input_text.split("##")
         # print options_list
@@ -94,4 +98,5 @@ def imdb_search(input_text):
             item = om[i]
             d["title"] = (d["title"] if "title" in d.keys() else "") + item.title + " (" + item.year + ") \n"
         attach.append(d)
-    return text, attach
+        message_list.append((text, attach))
+    return message_list

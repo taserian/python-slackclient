@@ -12,13 +12,15 @@ BOT_ID = os.environ.get("BOT_ID")
 
 
 def bothelp(text):
+    message_list = []
     text = "Here's everything I can do:"
-    att = []
+    attach = []
     fields = []
     for key, available_command in COMMANDS.items():
         fields.append(dict(title=key, value=available_command.description))
-    att.append(dict(fields=fields))
-    return text, att
+    attach.append(dict(fields=fields))
+    message_list.append((text, attach))
+    return message_list
 
 
 # constants
@@ -46,12 +48,13 @@ def handle_command(comm, chan):
     attach = []
     received_command = comm.split(" ")[0]
     if received_command in COMMANDS.keys():
-        t, attach = COMMANDS[received_command].func(" ".join(comm.split(" ")[1:]))
-        # print t, attach
-    slack_client.api_call("chat.postMessage", channel=chan,
-                          text=t,
-                          attachments=attach,
-                          as_user=True)
+        message_list = COMMANDS[received_command].func(" ".join(comm.split(" ")[1:]))
+        for (t, attach) in message_list:
+            # print t, attach
+            slack_client.api_call("chat.postMessage", channel=chan,
+                                  text=t,
+                                  attachments=attach,
+                                  as_user=True)
 
 
 def parse_slack_output(slack_rtm_output):
