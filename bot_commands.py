@@ -5,7 +5,6 @@ import requests
 
 
 def imdb_info(input_text):
-    OMDB_API = os.environ.get("OMDB_API")
     message_list = []
     if len(input_text) == 0:
         text = "Command format: imdb <title> [ ## <year> ]"
@@ -28,13 +27,12 @@ def imdb_info(input_text):
 
 
 def imdb_by_code(input_text):
-    OMDB_API = os.environ.get("OMDB_API")
     message_list = []
     if len(input_text) == 0:
         text = "Command format: imdbtt  <imdb_id>"
         message_list.append((text, []))
     else:
-        om = omdb.imdbid(input_text)
+        om = omdb.imdbid(input_text, tomatoes=True)
         if "title" in om.keys():
             message_list = output_movie(input_text, om)
         else:
@@ -67,8 +65,8 @@ def output_movie(input_text, om):
 
 def get_trailer(imdb_id):
     TMDB_API = os.environ.get("TMDB_API")
-    find_movie_url = 'https://api.themoviedb.org/3/find/{id}?api_key={api}&language=en-US&external_source=imdb_id'.format(
-        id=imdb_id, api=TMDB_API)
+    find_movie_url = 'https://api.themoviedb.org/3/find/{id}?api_key={api}&language=en-US&external_source=imdb_id'. \
+        format(id=imdb_id, api=TMDB_API)
     t = _GET(find_movie_url)
     tmdb_movie_id = t['movie_results'][0]['id']
     get_trailer_url = 'https://api.themoviedb.org/3/movie/{id}/videos?api_key={api}&language=en-US'.format(
