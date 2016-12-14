@@ -33,7 +33,7 @@ def imdb_info(input_text):
                                 )
                            ])
             message_list.append((text, attach))
-            text = get_trailer(om.imdb_id)
+            text = "".join(["<", get_trailer(om.imdb_id), ">"])
             message_list.append((text, []))
         else:
             text = "Sorry, I can't seem to find anything for " + input_text

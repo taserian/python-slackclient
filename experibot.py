@@ -48,6 +48,7 @@ def handle_command(comm, chan):
     attach = []
     received_command = comm.split(" ")[0]
     if received_command in COMMANDS.keys():
+        # Implementing message list, to allow bot to send multiple messages at once
         message_list = COMMANDS[received_command].func(" ".join(comm.split(" ")[1:]))
         for (t, attach) in message_list:
             # print t, attach
