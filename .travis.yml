@@ -4,7 +4,7 @@ os:
 language: python
 python:
   - "3.5"
- env:
+env:
     matrix:
         - TOX_ENV=py27
         - TOX_ENV=py34
