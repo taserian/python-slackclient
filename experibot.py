@@ -1,8 +1,10 @@
+import argparse
 import os
 import time
 from collections import namedtuple
 
 import bot_commands as c
+import command_caller as a
 from slackclient import SlackClient
 
 command_struct = namedtuple("command_struct", ["func", "description"])
@@ -76,13 +78,20 @@ def parse_slack_output(slack_rtm_output):
 
 
 if __name__ == "__main__":
-    READ_WEBSOCKET_DELAY = 1  # 1 second delay between reading from firehose
-    if slack_client.rtm_connect():
-        # print("StarterBot connected and running!")
-        while True:
-            command, channel = parse_slack_output(slack_client.rtm_read())
-            if command and channel:
-                handle_command(command, channel)
-            time.sleep(READ_WEBSOCKET_DELAY)
+    parser = argparse.ArgumentParser(description="experimental imdb slackbot with local abilities")
+    parser.add_argument("--loc", choices=["local", "slack"], default="slack")
+    args = vars(parser.parse_args())
+
+    if "loc" in args.keys() and args["loc"] == "local":
+        a.test_each_output()
     else:
-        print("Connection failed. Invalid Slack token or bot ID?")
+        READ_WEBSOCKET_DELAY = 1  # 1 second delay between reading from firehose
+        if slack_client.rtm_connect():
+            # print("StarterBot connected and running!")
+            while True:
+                command, channel = parse_slack_output(slack_client.rtm_read())
+                if command and channel:
+                    handle_command(command, channel)
+                time.sleep(READ_WEBSOCKET_DELAY)
+        else:
+            print("Connection failed. Invalid Slack token or bot ID?")

@@ -68,12 +68,16 @@ def get_trailer(imdb_id):
     find_movie_url = 'https://api.themoviedb.org/3/find/{id}?api_key={api}&language=en-US&external_source=imdb_id'. \
         format(id=imdb_id, api=TMDB_API)
     t = _GET(find_movie_url)
-    tmdb_movie_id = t['movie_results'][0]['id']
-    get_trailer_url = 'https://api.themoviedb.org/3/movie/{id}/videos?api_key={api}&language=en-US'.format(
-        id=tmdb_movie_id, api=TMDB_API)
-    t = _GET(get_trailer_url)
-    latest_trailer_key = t['results'][0]['key']
-    return "http://www.youtube.com/watch?v={yt_key}".format(yt_key=latest_trailer_key)
+    if t["movie_results"]:
+        tmdb_movie_id = t['movie_results'][0]['id']
+        get_trailer_url = 'https://api.themoviedb.org/3/movie/{id}/videos?api_key={api}&language=en-US'.format(
+            id=tmdb_movie_id, api=TMDB_API)
+        t = _GET(get_trailer_url)
+        if t['results']:
+            latest_trailer_key = t['results'][0]['key']
+            return "http://www.youtube.com/watch?v={yt_key}".format(yt_key=latest_trailer_key)
+    else:
+        return "No trailer found."
 
 
 def _GET(path):

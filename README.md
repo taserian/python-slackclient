@@ -1,5 +1,28 @@
-python-slackclient
+BOTIN
 ================
+
+[![Build Status](https://travis-ci.org/taserian/python-slackclient.svg?branch=master)](https://travis-ci.org/slackhq/python-slackclient)
+
+Botin (Spanish for "little bot")
+
+This is a small bot used by a slack community of friends that have been communicating with each other via computers since the days of BBSes.
+
+Derived from slackhq/python-slackclient (Their README.md is below)
+
+
+
+Commands implemented:
+-  help: To learn its commands.
+-  imdb: Search for a movie
+-  imdbs: Search for similarly-titled movies
+-  imdbtt: Search for a movie given an IMDB ID (ttcode)
+
+Uses omdb.py and TMDB.
+
+
+
+python-slackclient
+-----------------
 
 [![Build Status](https://travis-ci.org/slackhq/python-slackclient.svg?branch=master)](https://travis-ci.org/slackhq/python-slackclient)
 [![Coverage Status](https://coveralls.io/repos/github/slackhq/python-slackclient/badge.svg?branch=master)](https://coveralls.io/github/slackhq/python-slackclient?branch=master)
