@@ -58,12 +58,13 @@ def output_movie(input_text, om):
                         )
                    ])
     output.append((text, attach))
-    text = "".join(["<", get_trailer(om.imdb_id), ">"])
+    text = get_trailer(om.imdb_id)
     output.append((text, []))
     return output
 
 
 def get_trailer(imdb_id):
+    trailer_info = "No trailer found."
     TMDB_API = os.environ.get("TMDB_API")
     find_movie_url = 'https://api.themoviedb.org/3/find/{id}?api_key={api}&language=en-US&external_source=imdb_id'. \
         format(id=imdb_id, api=TMDB_API)
@@ -75,9 +76,10 @@ def get_trailer(imdb_id):
         t = _GET(get_trailer_url)
         if t['results']:
             latest_trailer_key = t['results'][0]['key']
-            return "http://www.youtube.com/watch?v={yt_key}".format(yt_key=latest_trailer_key)
-    else:
-        return "No trailer found."
+            trailer_info = "".join(["<",
+                                    "http://www.youtube.com/watch?v={yt_key}".format(yt_key=latest_trailer_key),
+                                    ">"])
+    return trailer_info
 
 
 def _GET(path):

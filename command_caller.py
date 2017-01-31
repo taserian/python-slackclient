@@ -16,3 +16,5 @@ def call_imdb_search(s):
 def test_each_output():
     print("imdb Fantastic Four ## 1994")
     call_imdb_info("Fantastic Four ## 1994")
+    print("imdb white comanche")
+    call_imdb_info("white comanche")
