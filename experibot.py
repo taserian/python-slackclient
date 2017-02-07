@@ -1,6 +1,7 @@
 import argparse
 import os
 import time
+import traceback
 from collections import namedtuple
 
 import bot_commands as c
@@ -51,13 +52,27 @@ def handle_command(comm, chan):
     attach = []
     received_command = comm.split(" ")[0]
     if received_command in COMMANDS.keys():
-        # Implementing message list, to allow bot to send multiple messages at once
-        message_list = COMMANDS[received_command].func(" ".join(comm.split(" ")[1:]))
-        for (t, attach) in message_list:
-            # print t, attach
-            slack_client.api_call("chat.postMessage", channel=chan,
+        try:
+            # Implementing message list, to allow bot to send multiple messages at once
+            message_list = COMMANDS[received_command].func(" ".join(comm.split(" ")[1:]))
+            for (t, attach) in message_list:
+                # print t, attach
+                slack_client.api_call("chat.postMessage", channel=chan,
+                                      text=t,
+                                      attachments=attach,
+                                      as_user=True)
+        except:
+            t = "Command text `" + comm + "` resulted in the following exception: "
+            t += traceback.format_exc()
+            slack_client.api_call("chat.postMessage", channel="#botin_test",
                                   text=t,
-                                  attachments=attach,
+                                  attachments=None,
+                                  as_user=True)
+            tc = "Sorry, error encountered with command " + comm
+            tc += ". Diagnostics printed to #botin_test."
+            slack_client.api_call("chat.postMessage", channel="#botin_test",
+                                  text=tc,
+                                  attachments=None,
                                   as_user=True)
 
 
@@ -81,7 +96,6 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="experimental imdb slackbot with local abilities")
     parser.add_argument("--loc", choices=["local", "slack"], default="slack")
     args = vars(parser.parse_args())
-
     if "loc" in args.keys() and args["loc"] == "local":
         a.test_each_output()
     else:
